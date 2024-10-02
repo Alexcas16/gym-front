@@ -1,6 +1,9 @@
 // REACT
 import React, { useState } from 'react';
 
+// AXIOS
+import axiosInstance from '../../helpers/axios';
+
 const Login: React.FC = () => {
     // VARIABLES
     const [user, setUser] = useState<string>('');
@@ -20,6 +23,19 @@ const Login: React.FC = () => {
 
         console.log('User:', user);
         console.log('Password:', password);
+
+        axiosInstance.post('/login/tryLogin', {
+            user: user,
+            password: password,
+          })
+          .then((response) => {
+            console.log('Response:', response.data);
+            // Aquí puedes manejar la respuesta de éxito, como redirigir al usuario o mostrar un mensaje
+          })
+          .catch((err) => {
+            console.error('Error en la solicitud de inicio de sesión:', err);
+            setError('Error en las credenciales, por favor intenta de nuevo.'); // Manejo de errores
+          });
     };
 
     // DOM
@@ -37,7 +53,7 @@ const Login: React.FC = () => {
             )}
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="user" className="block text-sm font-medium text-gray-700">
                     Usuario
                 </label>
                 <input
